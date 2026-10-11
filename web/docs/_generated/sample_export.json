@@ -1,0 +1,399 @@
+{
+  "checkpoint": "3a905fecbc10457a8721eec33e534606abfb33c6",
+  "edges": [
+    {
+      "edge_type": "CALLS",
+      "source_id": "a12b4818e99259d0",
+      "target_id": "4bfc70378e3f43a9"
+    },
+    {
+      "edge_type": "CALLS",
+      "source_id": "b943861d8e76e393",
+      "target_id": "368ed7df7a37b677"
+    },
+    {
+      "edge_type": "CONTAINS",
+      "source_id": "50877967954a0126",
+      "target_id": "4bfc70378e3f43a9"
+    },
+    {
+      "edge_type": "CONTAINS",
+      "source_id": "50877967954a0126",
+      "target_id": "584e5c34ca794587"
+    },
+    {
+      "edge_type": "CONTAINS",
+      "source_id": "50877967954a0126",
+      "target_id": "f5ef50425ed9c0af"
+    },
+    {
+      "edge_type": "CONTAINS",
+      "source_id": "57992df372a7a124",
+      "target_id": "9dc289f65e7d30a7"
+    },
+    {
+      "edge_type": "CONTAINS",
+      "source_id": "57992df372a7a124",
+      "target_id": "a12b4818e99259d0"
+    },
+    {
+      "edge_type": "CONTAINS",
+      "source_id": "57992df372a7a124",
+      "target_id": "b3484230e69b606b"
+    },
+    {
+      "edge_type": "CONTAINS",
+      "source_id": "b46561007f1eb755",
+      "target_id": "5228ce61effaf0c8"
+    },
+    {
+      "edge_type": "CONTAINS",
+      "source_id": "b46561007f1eb755",
+      "target_id": "b0a4359b475e1cf6"
+    },
+    {
+      "edge_type": "CONTAINS",
+      "source_id": "repo:root",
+      "target_id": "file:backend/base.py"
+    },
+    {
+      "edge_type": "CONTAINS",
+      "source_id": "repo:root",
+      "target_id": "file:backend/services/auth_service.py"
+    },
+    {
+      "edge_type": "CONTAINS",
+      "source_id": "repo:root",
+      "target_id": "file:backend/services/user_service.py"
+    },
+    {
+      "edge_type": "CONTAINS",
+      "source_id": "repo:root",
+      "target_id": "file:frontend/App.tsx"
+    },
+    {
+      "edge_type": "CONTAINS",
+      "source_id": "repo:root",
+      "target_id": "file:frontend/types.ts"
+    },
+    {
+      "edge_type": "CONTAINS",
+      "source_id": "repo:root",
+      "target_id": "file:frontend/utils/string_formatter.js"
+    },
+    {
+      "edge_type": "DEFINES",
+      "source_id": "file:backend/base.py",
+      "target_id": "50877967954a0126"
+    },
+    {
+      "edge_type": "DEFINES",
+      "source_id": "file:backend/services/auth_service.py",
+      "target_id": "b46561007f1eb755"
+    },
+    {
+      "edge_type": "DEFINES",
+      "source_id": "file:backend/services/user_service.py",
+      "target_id": "57992df372a7a124"
+    },
+    {
+      "edge_type": "DEFINES",
+      "source_id": "file:frontend/App.tsx",
+      "target_id": "b943861d8e76e393"
+    },
+    {
+      "edge_type": "DEFINES",
+      "source_id": "file:frontend/types.ts",
+      "target_id": "e69c417789a722d3"
+    },
+    {
+      "edge_type": "DEFINES",
+      "source_id": "file:frontend/utils/string_formatter.js",
+      "target_id": "368ed7df7a37b677"
+    },
+    {
+      "edge_type": "DEFINES",
+      "source_id": "file:frontend/utils/string_formatter.js",
+      "target_id": "aba35b54a9b8fcaa"
+    },
+    {
+      "edge_type": "IMPORTS",
+      "source_id": "file:backend/services/auth_service.py",
+      "target_id": "file:backend/base.py"
+    },
+    {
+      "edge_type": "IMPORTS",
+      "source_id": "file:backend/services/user_service.py",
+      "target_id": "file:backend/base.py"
+    },
+    {
+      "edge_type": "IMPORTS",
+      "source_id": "file:frontend/App.tsx",
+      "target_id": "file:frontend/types.ts"
+    },
+    {
+      "edge_type": "IMPORTS",
+      "source_id": "file:frontend/App.tsx",
+      "target_id": "file:frontend/utils/string_formatter.js"
+    },
+    {
+      "edge_type": "INHERITS_FROM",
+      "source_id": "57992df372a7a124",
+      "target_id": "50877967954a0126"
+    },
+    {
+      "edge_type": "INHERITS_FROM",
+      "source_id": "b46561007f1eb755",
+      "target_id": "50877967954a0126"
+    },
+    {
+      "edge_type": "REFERENCES",
+      "source_id": "a12b4818e99259d0",
+      "target_id": "4bfc70378e3f43a9"
+    },
+    {
+      "edge_type": "REFERENCES",
+      "source_id": "b943861d8e76e393",
+      "target_id": "368ed7df7a37b677"
+    }
+  ],
+  "edges_count": 31,
+  "files": [
+    {
+      "has_errors": 0,
+      "language": "python",
+      "parse_error": 0,
+      "path": "backend/base.py"
+    },
+    {
+      "has_errors": 0,
+      "language": "python",
+      "parse_error": 0,
+      "path": "backend/services/auth_service.py"
+    },
+    {
+      "has_errors": 0,
+      "language": "python",
+      "parse_error": 0,
+      "path": "backend/services/user_service.py"
+    },
+    {
+      "has_errors": 0,
+      "language": "tsx",
+      "parse_error": 0,
+      "path": "frontend/App.tsx"
+    },
+    {
+      "has_errors": 0,
+      "language": "typescript",
+      "parse_error": 0,
+      "path": "frontend/types.ts"
+    },
+    {
+      "has_errors": 0,
+      "language": "javascript",
+      "parse_error": 0,
+      "path": "frontend/utils/string_formatter.js"
+    }
+  ],
+  "files_count": 6,
+  "references": [
+    {
+      "context_qualified_name": "BaseService.calculate_hash",
+      "file_path": "backend/base.py",
+      "name": "hash",
+      "resolved_symbol_id": null,
+      "status": "unresolved"
+    },
+    {
+      "context_qualified_name": "UserService.dynamic_call",
+      "file_path": "backend/services/user_service.py",
+      "name": "getattr",
+      "resolved_symbol_id": null,
+      "status": "unresolved"
+    },
+    {
+      "context_qualified_name": "UserService.dynamic_call",
+      "file_path": "backend/services/user_service.py",
+      "name": "getattr(handler, action)",
+      "resolved_symbol_id": null,
+      "status": "unresolved"
+    },
+    {
+      "context_qualified_name": "UserService.get_user",
+      "file_path": "backend/services/user_service.py",
+      "name": "self.execute",
+      "resolved_symbol_id": "4bfc70378e3f43a9",
+      "status": "resolved"
+    },
+    {
+      "context_qualified_name": "UserCard",
+      "file_path": "frontend/App.tsx",
+      "name": "formatName",
+      "resolved_symbol_id": "368ed7df7a37b677",
+      "status": "resolved"
+    },
+    {
+      "context_qualified_name": "formatName",
+      "file_path": "frontend/utils/string_formatter.js",
+      "name": "user.name.toUpperCase",
+      "resolved_symbol_id": null,
+      "status": "unresolved"
+    }
+  ],
+  "references_count": 6,
+  "schema_version": 1,
+  "symbols": [
+    {
+      "end_line": 9,
+      "file_path": "backend/base.py",
+      "id": "50877967954a0126",
+      "kind": "class",
+      "name": "BaseService",
+      "ordinal": 0,
+      "qualified_name": "BaseService",
+      "start_line": 1
+    },
+    {
+      "end_line": 3,
+      "file_path": "backend/base.py",
+      "id": "f5ef50425ed9c0af",
+      "kind": "method",
+      "name": "__init__",
+      "ordinal": 0,
+      "qualified_name": "BaseService.__init__",
+      "start_line": 2
+    },
+    {
+      "end_line": 9,
+      "file_path": "backend/base.py",
+      "id": "584e5c34ca794587",
+      "kind": "method",
+      "name": "calculate_hash",
+      "ordinal": 0,
+      "qualified_name": "BaseService.calculate_hash",
+      "start_line": 8
+    },
+    {
+      "end_line": 6,
+      "file_path": "backend/base.py",
+      "id": "4bfc70378e3f43a9",
+      "kind": "method",
+      "name": "execute",
+      "ordinal": 0,
+      "qualified_name": "BaseService.execute",
+      "start_line": 5
+    },
+    {
+      "end_line": 7,
+      "file_path": "backend/services/auth_service.py",
+      "id": "b46561007f1eb755",
+      "kind": "class",
+      "name": "AuthService",
+      "ordinal": 0,
+      "qualified_name": "AuthService",
+      "start_line": 3
+    },
+    {
+      "end_line": 5,
+      "file_path": "backend/services/auth_service.py",
+      "id": "b0a4359b475e1cf6",
+      "kind": "method",
+      "name": "authenticate",
+      "ordinal": 0,
+      "qualified_name": "AuthService.authenticate",
+      "start_line": 4
+    },
+    {
+      "end_line": 7,
+      "file_path": "backend/services/auth_service.py",
+      "id": "5228ce61effaf0c8",
+      "kind": "method",
+      "name": "logout",
+      "ordinal": 0,
+      "qualified_name": "AuthService.logout",
+      "start_line": 7
+    },
+    {
+      "end_line": 12,
+      "file_path": "backend/services/user_service.py",
+      "id": "57992df372a7a124",
+      "kind": "class",
+      "name": "UserService",
+      "ordinal": 0,
+      "qualified_name": "UserService",
+      "start_line": 3
+    },
+    {
+      "end_line": 12,
+      "file_path": "backend/services/user_service.py",
+      "id": "9dc289f65e7d30a7",
+      "kind": "method",
+      "name": "delete_user",
+      "ordinal": 0,
+      "qualified_name": "UserService.delete_user",
+      "start_line": 11
+    },
+    {
+      "end_line": 9,
+      "file_path": "backend/services/user_service.py",
+      "id": "b3484230e69b606b",
+      "kind": "method",
+      "name": "dynamic_call",
+      "ordinal": 0,
+      "qualified_name": "UserService.dynamic_call",
+      "start_line": 7
+    },
+    {
+      "end_line": 5,
+      "file_path": "backend/services/user_service.py",
+      "id": "a12b4818e99259d0",
+      "kind": "method",
+      "name": "get_user",
+      "ordinal": 0,
+      "qualified_name": "UserService.get_user",
+      "start_line": 4
+    },
+    {
+      "end_line": 6,
+      "file_path": "frontend/App.tsx",
+      "id": "b943861d8e76e393",
+      "kind": "function",
+      "name": "UserCard",
+      "ordinal": 0,
+      "qualified_name": "UserCard",
+      "start_line": 4
+    },
+    {
+      "end_line": 4,
+      "file_path": "frontend/types.ts",
+      "id": "e69c417789a722d3",
+      "kind": "class",
+      "name": "User",
+      "ordinal": 0,
+      "qualified_name": "User",
+      "start_line": 1
+    },
+    {
+      "end_line": 7,
+      "file_path": "frontend/utils/string_formatter.js",
+      "id": "aba35b54a9b8fcaa",
+      "kind": "function",
+      "name": "calculate_hash",
+      "ordinal": 0,
+      "qualified_name": "calculate_hash",
+      "start_line": 5
+    },
+    {
+      "end_line": 3,
+      "file_path": "frontend/utils/string_formatter.js",
+      "id": "368ed7df7a37b677",
+      "kind": "function",
+      "name": "formatName",
+      "ordinal": 0,
+      "qualified_name": "formatName",
+      "start_line": 1
+    }
+  ],
+  "symbols_count": 15
+}

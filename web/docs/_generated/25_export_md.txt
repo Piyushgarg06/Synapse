@@ -1,0 +1,2 @@
+$ synapse export md -o synapse_export.md
+Exported Markdown overview to synapse_export.md

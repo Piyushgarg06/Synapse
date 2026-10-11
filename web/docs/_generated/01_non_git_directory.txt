@@ -1,0 +1,2 @@
+$ synapse init
+Error: Not in a git repository.

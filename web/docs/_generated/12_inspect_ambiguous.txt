@@ -1,0 +1,4 @@
+$ synapse inspect calculate_hash
+Ambiguous symbol query 'calculate_hash'. Multiple symbols match:
+  - method   BaseService.calculate_hash (backend/base.py:8) [id: 584e5c34ca794587]
+  - function calculate_hash (frontend/utils/formatter.js:5) [id: ded20412ae16b6bb]

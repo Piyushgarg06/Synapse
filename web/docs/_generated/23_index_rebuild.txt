@@ -1,0 +1,4 @@
+$ synapse index --rebuild
+Indexed 6 files, 15 symbols.
+  Files processed: 6
+  Symbols found: 15

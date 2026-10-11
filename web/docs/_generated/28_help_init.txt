@@ -1,0 +1,5 @@
+$ synapse init --help
+usage: synapse init [-h]
+
+options:
+  -h, --help  show this help message and exit

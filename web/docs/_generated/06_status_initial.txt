@@ -1,0 +1,9 @@
+$ synapse status
+Synapse Status:
+  HEAD commit:    fca04155
+  Last indexed:   fca04155
+  Up to date:     yes
+  Files indexed:  6
+  Symbols:        12
+  Edges:          26
+  Parse errors:   1

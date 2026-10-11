@@ -1,0 +1,11 @@
+$ synapse status
+Synapse Status:
+  HEAD commit:    fca04155
+  Last indexed:   fca04155
+  Up to date:     no
+  Files indexed:  6
+  Symbols:        12
+  Edges:          26
+  Parse errors:   1
+  [!] Working tree has uncommitted changes not reflected in the index.
+  [!] Working tree has uncommitted changes not reflected in the index.

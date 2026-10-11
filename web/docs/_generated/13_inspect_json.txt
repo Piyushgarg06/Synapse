@@ -1,0 +1,43 @@
+$ synapse inspect UserService --json
+{
+  "found": true,
+  "ambiguous": false,
+  "symbol": {
+    "id": "57992df372a7a124",
+    "name": "UserService",
+    "qualified_name": "UserService",
+    "kind": "class",
+    "file_path": "backend/services/user_service.py",
+    "start_byte": 38,
+    "end_byte": 297,
+    "start_line": 3,
+    "start_column": 0,
+    "end_line": 9,
+    "end_column": 41,
+    "ordinal": 0
+  },
+  "parent": null,
+  "callers": [],
+  "callees": [],
+  "base_classes": [
+    {
+      "rel_id": "50877967954a0126",
+      "name": "BaseService",
+      "qualified_name": "BaseService",
+      "kind": "class",
+      "file_path": "backend/base.py",
+      "start_line": 1,
+      "depth": 1
+    }
+  ],
+  "subclasses": [],
+  "file_imports": [
+    {
+      "module_name": "backend.base",
+      "imported_names": "BaseService",
+      "alias": null
+    }
+  ],
+  "unresolved_references": [],
+  "depth": 1
+}

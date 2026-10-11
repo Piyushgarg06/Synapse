@@ -1,0 +1,6 @@
+$ synapse inspect UserService
+Symbol: UserService (class)
+  File:     backend/services/user_service.py:3-9
+  ID:       57992df372a7a124
+  Inherits from:
+    - BaseService (backend/base.py:1)

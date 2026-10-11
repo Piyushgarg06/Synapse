@@ -1,0 +1,18 @@
+/* Bad CSS fixture with deliberate violations for linter testing */
+
+.gradient-title {
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.traffic-light-red {
+  color: #ff5f56;
+}
+
+.card-one {
+  backdrop-filter: blur(10px);
+}
+
+.card-two {
+  backdrop-filter: blur(20px);
+}

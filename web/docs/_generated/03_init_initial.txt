@@ -1,0 +1,2 @@
+$ synapse init
+Synapse initialized successfully (schema v1).

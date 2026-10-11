@@ -1,0 +1,5 @@
+$ synapse search UserService
+Found 3 result(s) for 'UserService':
+  class     UserService  (backend/services/user_service.py:3)
+  method    UserService.dynamic_call  (backend/services/user_service.py:7)
+  method    UserService.get_user  (backend/services/user_service.py:4)

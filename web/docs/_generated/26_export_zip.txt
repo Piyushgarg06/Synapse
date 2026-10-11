@@ -1,0 +1,2 @@
+$ synapse export zip -o synapse_export.zip
+Exported ZIP snapshot to synapse_export.zip

@@ -1,0 +1,9 @@
+$ synapse export --help
+usage: synapse export [-h] [-o OUTPUT] {json,md,zip}
+
+positional arguments:
+  {json,md,zip}        Export format
+
+options:
+  -h, --help           show this help message and exit
+  -o, --output OUTPUT  Output file path

@@ -1,0 +1,13 @@
+$ synapse index --json
+{
+  "mode": "incremental",
+  "files_added": 0,
+  "files_modified": 1,
+  "files_deleted": 0,
+  "files_renamed": 0,
+  "files_skipped": 0,
+  "symbols_found": 3,
+  "reparsed": 1,
+  "checkpoint": "3a905fecbc10457a8721eec33e534606abfb33c6",
+  "message": "Incremental update: 1 files changed."
+}

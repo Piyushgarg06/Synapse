@@ -1,0 +1,33 @@
+$ synapse search UserService --json
+[
+  {
+    "type": "symbol",
+    "id": "57992df372a7a124",
+    "name": "UserService",
+    "qualified_name": "UserService",
+    "kind": "class",
+    "file_path": "backend/services/user_service.py",
+    "start_line": 3,
+    "end_line": 9
+  },
+  {
+    "type": "symbol",
+    "id": "b3484230e69b606b",
+    "name": "dynamic_call",
+    "qualified_name": "UserService.dynamic_call",
+    "kind": "method",
+    "file_path": "backend/services/user_service.py",
+    "start_line": 7,
+    "end_line": 9
+  },
+  {
+    "type": "symbol",
+    "id": "a12b4818e99259d0",
+    "name": "get_user",
+    "qualified_name": "UserService.get_user",
+    "kind": "method",
+    "file_path": "backend/services/user_service.py",
+    "start_line": 4,
+    "end_line": 5
+  }
+]

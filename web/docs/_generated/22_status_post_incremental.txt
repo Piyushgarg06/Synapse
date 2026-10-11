@@ -1,0 +1,8 @@
+$ synapse status
+Synapse Status:
+  HEAD commit:    3a905fec
+  Last indexed:   3a905fec
+  Up to date:     yes
+  Files indexed:  6
+  Symbols:        15
+  Edges:          31

@@ -1,0 +1,21 @@
+{
+  "name": "synapse-docs",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Documentation website for Synapse Repository Intelligence Engine",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "lint:slop": "python scripts/slop_lint.py",
+    "test:lint": "python scripts/test_slop_lint.py",
+    "capture": "python scripts/capture_pipeline.py",
+    "check:drift": "python scripts/check_drift.py",
+    "check:links": "node scripts/check_links.js",
+    "check:json": "python scripts/check_json_schemas.py",
+    "check": "npm run lint:slop && npm run test:lint && npm run check:drift && npm run check:json && npm run docs:build"
+  },
+  "devDependencies": {
+    "vitepress": "^1.5.0"
+  }
+}

@@ -1,0 +1,16 @@
+$ synapse context get_user
+# Synapse Repository Context: get_user
+
+Note: This context document was generated deterministically from static analysis. Snippets reflect indexed files. Dynamic calls, runtime reflection, and unindexed files remain unresolved and must not be assumed to be fully understood.
+
+Found 1 item(s):
+
+## Method: UserService.get_user
+Path: `backend/services/user_service.py` (Lines 4-5)
+Reason: exact match
+```
+    def get_user(self, user_id: int):
+        return self.execute()
+```
+Calls:
+  - BaseService.execute (backend/base.py:5)

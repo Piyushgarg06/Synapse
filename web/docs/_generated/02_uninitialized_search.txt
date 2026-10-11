@@ -1,0 +1,2 @@
+$ synapse search UserService
+Error: Synapse not initialized. Run 'synapse init' first.

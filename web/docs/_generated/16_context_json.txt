@@ -1,0 +1,37 @@
+$ synapse context get_user --json
+{
+  "query": "get_user",
+  "max_results": 10,
+  "max_bytes": 8192,
+  "depth": 2,
+  "results_count": 1,
+  "items": [
+    {
+      "id": "a12b4818e99259d0",
+      "name": "get_user",
+      "qualified_name": "UserService.get_user",
+      "kind": "method",
+      "file_path": "backend/services/user_service.py",
+      "start_line": 4,
+      "end_line": 5,
+      "reason": "exact match",
+      "snippet": "    def get_user(self, user_id: int):\n        return self.execute()\n",
+      "is_stale": false,
+      "was_truncated": false,
+      "callers": [],
+      "callees": [
+        {
+          "rel_id": "4bfc70378e3f43a9",
+          "name": "execute",
+          "qualified_name": "BaseService.execute",
+          "kind": "method",
+          "file_path": "backend/base.py",
+          "start_line": 5,
+          "depth": 1
+        }
+      ]
+    }
+  ],
+  "unresolved_dependencies": [],
+  "disclaimer": "Note: This context document was generated deterministically from static analysis. Snippets reflect indexed files. Dynamic calls, runtime reflection, and unindexed files remain unresolved and must not be assumed to be fully understood."
+}

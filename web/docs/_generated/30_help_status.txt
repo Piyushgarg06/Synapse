@@ -1,0 +1,6 @@
+$ synapse status --help
+usage: synapse status [-h] [--json]
+
+options:
+  -h, --help  show this help message and exit
+  --json      Output as JSON

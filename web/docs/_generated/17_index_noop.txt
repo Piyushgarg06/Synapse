@@ -1,0 +1,2 @@
+$ synapse index
+Index is up to date. Nothing to do.

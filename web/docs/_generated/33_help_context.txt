@@ -1,0 +1,18 @@
+$ synapse context --help
+usage: synapse context [-h] [--max-results MAX_RESULTS]
+                       [--max-bytes MAX_BYTES] [--depth DEPTH] [-o OUTPUT]
+                       [--json]
+                       query
+
+positional arguments:
+  query                 Context query
+
+options:
+  -h, --help            show this help message and exit
+  --max-results MAX_RESULTS
+                        Max results (default: 10)
+  --max-bytes MAX_BYTES
+                        Max bytes per snippet (default: 8192)
+  --depth DEPTH         Traversal depth (default: 2)
+  -o, --output OUTPUT   Output file path
+  --json                Output as JSON

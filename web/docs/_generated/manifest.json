@@ -1,0 +1,233 @@
+{
+  "01_non_git_directory": {
+    "command": "synapse init",
+    "exit_code": 1,
+    "scenario": "01_non_git_directory",
+    "stderr": "Error: Not in a git repository.",
+    "stdout": ""
+  },
+  "02_uninitialized_search": {
+    "command": "synapse search UserService",
+    "exit_code": 1,
+    "scenario": "02_uninitialized_search",
+    "stderr": "Error: Synapse not initialized. Run 'synapse init' first.",
+    "stdout": ""
+  },
+  "03_init_initial": {
+    "command": "synapse init",
+    "exit_code": 0,
+    "scenario": "03_init_initial",
+    "stderr": "",
+    "stdout": "Synapse initialized successfully (schema v1)."
+  },
+  "04_init_repeated": {
+    "command": "synapse init",
+    "exit_code": 0,
+    "scenario": "04_init_repeated",
+    "stderr": "",
+    "stdout": "Synapse already initialized (schema v1). Existing data preserved."
+  },
+  "05_index_initial": {
+    "command": "synapse index",
+    "exit_code": 0,
+    "scenario": "05_index_initial",
+    "stderr": "",
+    "stdout": "Indexed 6 files, 12 symbols.\n  Files processed: 6\n  Symbols found: 12"
+  },
+  "06_status_initial": {
+    "command": "synapse status",
+    "exit_code": 0,
+    "scenario": "06_status_initial",
+    "stderr": "",
+    "stdout": "Synapse Status:\n  HEAD commit:    fca04155\n  Last indexed:   fca04155\n  Up to date:     yes\n  Files indexed:  6\n  Symbols:        12\n  Edges:          26\n  Parse errors:   1"
+  },
+  "07_status_json": {
+    "command": "synapse status --json",
+    "exit_code": 0,
+    "scenario": "07_status_json",
+    "stderr": "",
+    "stdout": "{\n  \"initialized\": true,\n  \"head_commit\": \"fca04155\",\n  \"checkpoint\": \"fca04155\",\n  \"up_to_date\": true,\n  \"dirty_working_tree\": false,\n  \"files_indexed\": 6,\n  \"symbols_indexed\": 12,\n  \"edges\": 26,\n  \"files_with_errors\": 1\n}"
+  },
+  "08_search_user_service": {
+    "command": "synapse search UserService",
+    "exit_code": 0,
+    "scenario": "08_search_user_service",
+    "stderr": "",
+    "stdout": "Found 3 result(s) for 'UserService':\n  class     UserService  (backend/services/user_service.py:3)\n  method    UserService.dynamic_call  (backend/services/user_service.py:7)\n  method    UserService.get_user  (backend/services/user_service.py:4)"
+  },
+  "09_search_calculate_hash": {
+    "command": "synapse search calculate_hash",
+    "exit_code": 0,
+    "scenario": "09_search_calculate_hash",
+    "stderr": "",
+    "stdout": "Found 2 result(s) for 'calculate_hash':\n  method    BaseService.calculate_hash  (backend/base.py:8)\n  function  calculate_hash  (frontend/utils/formatter.js:5)"
+  },
+  "10_search_json": {
+    "command": "synapse search UserService --json",
+    "exit_code": 0,
+    "scenario": "10_search_json",
+    "stderr": "",
+    "stdout": "[\n  {\n    \"type\": \"symbol\",\n    \"id\": \"57992df372a7a124\",\n    \"name\": \"UserService\",\n    \"qualified_name\": \"UserService\",\n    \"kind\": \"class\",\n    \"file_path\": \"backend/services/user_service.py\",\n    \"start_line\": 3,\n    \"end_line\": 9\n  },\n  {\n    \"type\": \"symbol\",\n    \"id\": \"b3484230e69b606b\",\n    \"name\": \"dynamic_call\",\n    \"qualified_name\": \"UserService.dynamic_call\",\n    \"kind\": \"method\",\n    \"file_path\": \"backend/services/user_service.py\",\n    \"start_line\": 7,\n    \"end_line\": 9\n  },\n  {\n    \"type\": \"symbol\",\n    \"id\": \"a12b4818e99259d0\",\n    \"name\": \"get_user\",\n    \"qualified_name\": \"UserService.get_user\",\n    \"kind\": \"method\",\n    \"file_path\": \"backend/services/user_service.py\",\n    \"start_line\": 4,\n    \"end_line\": 5\n  }\n]"
+  },
+  "11_inspect_user_service": {
+    "command": "synapse inspect UserService",
+    "exit_code": 0,
+    "scenario": "11_inspect_user_service",
+    "stderr": "",
+    "stdout": "Symbol: UserService (class)\n  File:     backend/services/user_service.py:3-9\n  ID:       57992df372a7a124\n  Inherits from:\n    - BaseService (backend/base.py:1)"
+  },
+  "12_inspect_ambiguous": {
+    "command": "synapse inspect calculate_hash",
+    "exit_code": 0,
+    "scenario": "12_inspect_ambiguous",
+    "stderr": "",
+    "stdout": "Ambiguous symbol query 'calculate_hash'. Multiple symbols match:\n  - method   BaseService.calculate_hash (backend/base.py:8) [id: 584e5c34ca794587]\n  - function calculate_hash (frontend/utils/formatter.js:5) [id: ded20412ae16b6bb]"
+  },
+  "13_inspect_json": {
+    "command": "synapse inspect UserService --json",
+    "exit_code": 0,
+    "scenario": "13_inspect_json",
+    "stderr": "",
+    "stdout": "{\n  \"found\": true,\n  \"ambiguous\": false,\n  \"symbol\": {\n    \"id\": \"57992df372a7a124\",\n    \"name\": \"UserService\",\n    \"qualified_name\": \"UserService\",\n    \"kind\": \"class\",\n    \"file_path\": \"backend/services/user_service.py\",\n    \"start_byte\": 38,\n    \"end_byte\": 297,\n    \"start_line\": 3,\n    \"start_column\": 0,\n    \"end_line\": 9,\n    \"end_column\": 41,\n    \"ordinal\": 0\n  },\n  \"parent\": null,\n  \"callers\": [],\n  \"callees\": [],\n  \"base_classes\": [\n    {\n      \"rel_id\": \"50877967954a0126\",\n      \"name\": \"BaseService\",\n      \"qualified_name\": \"BaseService\",\n      \"kind\": \"class\",\n      \"file_path\": \"backend/base.py\",\n      \"start_line\": 1,\n      \"depth\": 1\n    }\n  ],\n  \"subclasses\": [],\n  \"file_imports\": [\n    {\n      \"module_name\": \"backend.base\",\n      \"imported_names\": \"BaseService\",\n      \"alias\": null\n    }\n  ],\n  \"unresolved_references\": [],\n  \"depth\": 1\n}"
+  },
+  "14_context_get_user": {
+    "command": "synapse context get_user",
+    "exit_code": 0,
+    "scenario": "14_context_get_user",
+    "stderr": "",
+    "stdout": "# Synapse Repository Context: get_user\n\nNote: This context document was generated deterministically from static analysis. Snippets reflect indexed files. Dynamic calls, runtime reflection, and unindexed files remain unresolved and must not be assumed to be fully understood.\n\nFound 1 item(s):\n\n## Method: UserService.get_user\nPath: `backend/services/user_service.py` (Lines 4-5)\nReason: exact match\n```\n    def get_user(self, user_id: int):\n        return self.execute()\n```\nCalls:\n  - BaseService.execute (backend/base.py:5)"
+  },
+  "15_context_bounded": {
+    "command": "synapse context get_user --max-results 5 --max-bytes 4096 --depth 2",
+    "exit_code": 0,
+    "scenario": "15_context_bounded",
+    "stderr": "",
+    "stdout": "# Synapse Repository Context: get_user\n\nNote: This context document was generated deterministically from static analysis. Snippets reflect indexed files. Dynamic calls, runtime reflection, and unindexed files remain unresolved and must not be assumed to be fully understood.\n\nFound 1 item(s):\n\n## Method: UserService.get_user\nPath: `backend/services/user_service.py` (Lines 4-5)\nReason: exact match\n```\n    def get_user(self, user_id: int):\n        return self.execute()\n```\nCalls:\n  - BaseService.execute (backend/base.py:5)"
+  },
+  "16_context_json": {
+    "command": "synapse context get_user --json",
+    "exit_code": 0,
+    "scenario": "16_context_json",
+    "stderr": "",
+    "stdout": "{\n  \"query\": \"get_user\",\n  \"max_results\": 10,\n  \"max_bytes\": 8192,\n  \"depth\": 2,\n  \"results_count\": 1,\n  \"items\": [\n    {\n      \"id\": \"a12b4818e99259d0\",\n      \"name\": \"get_user\",\n      \"qualified_name\": \"UserService.get_user\",\n      \"kind\": \"method\",\n      \"file_path\": \"backend/services/user_service.py\",\n      \"start_line\": 4,\n      \"end_line\": 5,\n      \"reason\": \"exact match\",\n      \"snippet\": \"    def get_user(self, user_id: int):\\n        return self.execute()\\n\",\n      \"is_stale\": false,\n      \"was_truncated\": false,\n      \"callers\": [],\n      \"callees\": [\n        {\n          \"rel_id\": \"4bfc70378e3f43a9\",\n          \"name\": \"execute\",\n          \"qualified_name\": \"BaseService.execute\",\n          \"kind\": \"method\",\n          \"file_path\": \"backend/base.py\",\n          \"start_line\": 5,\n          \"depth\": 1\n        }\n      ]\n    }\n  ],\n  \"unresolved_dependencies\": [],\n  \"disclaimer\": \"Note: This context document was generated deterministically from static analysis. Snippets reflect indexed files. Dynamic calls, runtime reflection, and unindexed files remain unresolved and must not be assumed to be fully understood.\"\n}"
+  },
+  "17_index_noop": {
+    "command": "synapse index",
+    "exit_code": 0,
+    "scenario": "17_index_noop",
+    "stderr": "",
+    "stdout": "Index is up to date. Nothing to do."
+  },
+  "18_status_dirty": {
+    "command": "synapse status",
+    "exit_code": 0,
+    "scenario": "18_status_dirty",
+    "stderr": "",
+    "stdout": "Synapse Status:\n  HEAD commit:    fca04155\n  Last indexed:   fca04155\n  Up to date:     no\n  Files indexed:  6\n  Symbols:        12\n  Edges:          26\n  Parse errors:   1\n  [!] Working tree has uncommitted changes not reflected in the index.\n  [!] Working tree has uncommitted changes not reflected in the index."
+  },
+  "20_index_incremental": {
+    "command": "synapse index",
+    "exit_code": 0,
+    "scenario": "20_index_incremental",
+    "stderr": "",
+    "stdout": "Incremental update: 5 files changed.\n  Added: 1, Modified: 2, Deleted: 1, Renamed: 1"
+  },
+  "21_index_incremental_json": {
+    "command": "synapse index --json",
+    "exit_code": 0,
+    "scenario": "21_index_incremental_json",
+    "stderr": "",
+    "stdout": "{\n  \"mode\": \"incremental\",\n  \"files_added\": 0,\n  \"files_modified\": 1,\n  \"files_deleted\": 0,\n  \"files_renamed\": 0,\n  \"files_skipped\": 0,\n  \"symbols_found\": 3,\n  \"reparsed\": 1,\n  \"checkpoint\": \"3a905fecbc10457a8721eec33e534606abfb33c6\",\n  \"message\": \"Incremental update: 1 files changed.\"\n}"
+  },
+  "22_status_post_incremental": {
+    "command": "synapse status",
+    "exit_code": 0,
+    "scenario": "22_status_post_incremental",
+    "stderr": "",
+    "stdout": "Synapse Status:\n  HEAD commit:    3a905fec\n  Last indexed:   3a905fec\n  Up to date:     yes\n  Files indexed:  6\n  Symbols:        15\n  Edges:          31"
+  },
+  "23_index_rebuild": {
+    "command": "synapse index --rebuild",
+    "exit_code": 0,
+    "scenario": "23_index_rebuild",
+    "stderr": "",
+    "stdout": "Indexed 6 files, 15 symbols.\n  Files processed: 6\n  Symbols found: 15"
+  },
+  "24_export_json": {
+    "command": "synapse export json -o synapse_export.json",
+    "exit_code": 0,
+    "scenario": "24_export_json",
+    "stderr": "",
+    "stdout": "Exported JSON index to synapse_export.json"
+  },
+  "25_export_md": {
+    "command": "synapse export md -o synapse_export.md",
+    "exit_code": 0,
+    "scenario": "25_export_md",
+    "stderr": "",
+    "stdout": "Exported Markdown overview to synapse_export.md"
+  },
+  "26_export_zip": {
+    "command": "synapse export zip -o synapse_export.zip",
+    "exit_code": 0,
+    "scenario": "26_export_zip",
+    "stderr": "",
+    "stdout": "Exported ZIP snapshot to synapse_export.zip"
+  },
+  "27_help_main": {
+    "command": "synapse --help",
+    "exit_code": 0,
+    "scenario": "27_help_main",
+    "stderr": "",
+    "stdout": "usage: synapse [-h] {init,index,status,search,inspect,context,export} ...\n\nSynapse: Repository Intelligence Engine \ufffd local-first structural analysis and\nretrieval\n\npositional arguments:\n  {init,index,status,search,inspect,context,export}\n                        Available commands\n    init                Initialize Synapse in a Git repository\n    index               Index the repository (initial or incremental)\n    status              Show index status and statistics\n    search              Search for symbols and files\n    inspect             Inspect a symbol's definition and relationships\n    context             Retrieve focused repository context\n    export              Export index data\n\noptions:\n  -h, --help            show this help message and exit"
+  },
+  "28_help_init": {
+    "command": "synapse init --help",
+    "exit_code": 0,
+    "scenario": "28_help_init",
+    "stderr": "",
+    "stdout": "usage: synapse init [-h]\n\noptions:\n  -h, --help  show this help message and exit"
+  },
+  "29_help_index": {
+    "command": "synapse index --help",
+    "exit_code": 0,
+    "scenario": "29_help_index",
+    "stderr": "",
+    "stdout": "usage: synapse index [-h] [--rebuild] [--json]\n\noptions:\n  -h, --help  show this help message and exit\n  --rebuild   Force a full rebuild of the index\n  --json      Output as JSON"
+  },
+  "30_help_status": {
+    "command": "synapse status --help",
+    "exit_code": 0,
+    "scenario": "30_help_status",
+    "stderr": "",
+    "stdout": "usage: synapse status [-h] [--json]\n\noptions:\n  -h, --help  show this help message and exit\n  --json      Output as JSON"
+  },
+  "31_help_search": {
+    "command": "synapse search --help",
+    "exit_code": 0,
+    "scenario": "31_help_search",
+    "stderr": "",
+    "stdout": "usage: synapse search [-h] [--limit LIMIT] [--json] query\n\npositional arguments:\n  query          Search query (symbol or file name)\n\noptions:\n  -h, --help     show this help message and exit\n  --limit LIMIT  Maximum results (default: 20)\n  --json         Output as JSON"
+  },
+  "32_help_inspect": {
+    "command": "synapse inspect --help",
+    "exit_code": 0,
+    "scenario": "32_help_inspect",
+    "stderr": "",
+    "stdout": "usage: synapse inspect [-h] [--depth DEPTH] [--json] symbol\n\npositional arguments:\n  symbol         Symbol name to inspect\n\noptions:\n  -h, --help     show this help message and exit\n  --depth DEPTH  Traversal depth (default: 1)\n  --json         Output as JSON"
+  },
+  "33_help_context": {
+    "command": "synapse context --help",
+    "exit_code": 0,
+    "scenario": "33_help_context",
+    "stderr": "",
+    "stdout": "usage: synapse context [-h] [--max-results MAX_RESULTS]\n                       [--max-bytes MAX_BYTES] [--depth DEPTH] [-o OUTPUT]\n                       [--json]\n                       query\n\npositional arguments:\n  query                 Context query\n\noptions:\n  -h, --help            show this help message and exit\n  --max-results MAX_RESULTS\n                        Max results (default: 10)\n  --max-bytes MAX_BYTES\n                        Max bytes per snippet (default: 8192)\n  --depth DEPTH         Traversal depth (default: 2)\n  -o, --output OUTPUT   Output file path\n  --json                Output as JSON"
+  },
+  "34_help_export": {
+    "command": "synapse export --help",
+    "exit_code": 0,
+    "scenario": "34_help_export",
+    "stderr": "",
+    "stdout": "usage: synapse export [-h] [-o OUTPUT] {json,md,zip}\n\npositional arguments:\n  {json,md,zip}        Export format\n\noptions:\n  -h, --help           show this help message and exit\n  -o, --output OUTPUT  Output file path"
+  }
+}

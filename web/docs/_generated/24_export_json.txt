@@ -1,0 +1,2 @@
+$ synapse export json -o synapse_export.json
+Exported JSON index to synapse_export.json

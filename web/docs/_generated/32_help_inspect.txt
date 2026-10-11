@@ -1,0 +1,10 @@
+$ synapse inspect --help
+usage: synapse inspect [-h] [--depth DEPTH] [--json] symbol
+
+positional arguments:
+  symbol         Symbol name to inspect
+
+options:
+  -h, --help     show this help message and exit
+  --depth DEPTH  Traversal depth (default: 1)
+  --json         Output as JSON

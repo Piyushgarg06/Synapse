@@ -1,0 +1,10 @@
+$ synapse search --help
+usage: synapse search [-h] [--limit LIMIT] [--json] query
+
+positional arguments:
+  query          Search query (symbol or file name)
+
+options:
+  -h, --help     show this help message and exit
+  --limit LIMIT  Maximum results (default: 20)
+  --json         Output as JSON

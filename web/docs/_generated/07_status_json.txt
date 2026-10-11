@@ -1,0 +1,12 @@
+$ synapse status --json
+{
+  "initialized": true,
+  "head_commit": "fca04155",
+  "checkpoint": "fca04155",
+  "up_to_date": true,
+  "dirty_working_tree": false,
+  "files_indexed": 6,
+  "symbols_indexed": 12,
+  "edges": 26,
+  "files_with_errors": 1
+}

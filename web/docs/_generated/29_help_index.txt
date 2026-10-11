@@ -1,0 +1,7 @@
+$ synapse index --help
+usage: synapse index [-h] [--rebuild] [--json]
+
+options:
+  -h, --help  show this help message and exit
+  --rebuild   Force a full rebuild of the index
+  --json      Output as JSON

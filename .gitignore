@@ -36,3 +36,13 @@ index.json
 index.md
 *.zip
 synapse_export.*
+
+# Agent and build prompt files
+*_prompt.md
+*prompt*.md
+
+# Web documentation artifacts
+web/node_modules/
+web/docs/.vitepress/dist/
+web/docs/.vitepress/cache/
+

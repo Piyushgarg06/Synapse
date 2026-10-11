@@ -1,0 +1,4 @@
+$ synapse search calculate_hash
+Found 2 result(s) for 'calculate_hash':
+  method    BaseService.calculate_hash  (backend/base.py:8)
+  function  calculate_hash  (frontend/utils/formatter.js:5)

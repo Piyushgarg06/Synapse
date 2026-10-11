@@ -1,0 +1,4 @@
+$ synapse index
+Indexed 6 files, 12 symbols.
+  Files processed: 6
+  Symbols found: 12
