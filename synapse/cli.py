@@ -336,14 +336,14 @@ def build_parser() -> argparse.ArgumentParser:
     context_parser.add_argument("--max-results", type=int, default=10, help="Max results (default: 10)")
     context_parser.add_argument("--max-bytes", type=int, default=8192, help="Max bytes per snippet (default: 8192)")
     context_parser.add_argument("--depth", type=int, default=2, help="Traversal depth (default: 2)")
-    context_parser.add_argument("--output", type=str, help="Output file path")
+    context_parser.add_argument("-o", "--output", type=str, help="Output file path")
     context_parser.add_argument("--json", dest="json_output", action="store_true", help="Output as JSON")
     context_parser.set_defaults(func=cmd_context)
     
     # export
     export_parser = subparsers.add_parser("export", help="Export index data")
     export_parser.add_argument("format", choices=["json", "md", "zip"], help="Export format")
-    export_parser.add_argument("--output", type=str, help="Output file path")
+    export_parser.add_argument("-o", "--output", type=str, help="Output file path")
     export_parser.set_defaults(func=cmd_export)
     
     return parser
