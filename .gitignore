@@ -32,8 +32,8 @@ htmlcov/
 .coverage
 
 # Export artifacts
-index.json
-index.md
+/index.json
+/index.md
 *.zip
 synapse_export.*
 
