@@ -59,6 +59,7 @@ EXCLUDED_FILE_PATTERNS: list[str] = [
     r"\.svg$",                 # Vector images
     r"\.pdf$",                 # PDFs
     r"\.lock$",                # Lock files
+    r"^synapse_export\.",      # Export files
 ]
 
 _COMPILED_PATTERNS = [re.compile(p, re.IGNORECASE) for p in EXCLUDED_FILE_PATTERNS]

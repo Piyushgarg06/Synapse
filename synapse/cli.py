@@ -258,8 +258,38 @@ def cmd_export(args: argparse.Namespace) -> int:
         print("Error: Synapse not initialized. Run 'synapse init' first.", file=sys.stderr)
         return 1
     
-    # Stub for Phase 6
-    print(f"Export {args.format} will be implemented in Phase 6.", file=sys.stderr)
+    from synapse.export.exporter import export_json, export_markdown, export_zip
+    
+    with IndexDB(db_path) as db:
+        fmt = args.format.lower()
+        if fmt == "json":
+            data = export_json(db, repo_root)
+            json_text = json.dumps(data, indent=2, sort_keys=True)
+            if args.output:
+                with open(args.output, "w", encoding="utf-8") as f:
+                    f.write(json_text)
+                print(f"Exported JSON index to {args.output}")
+            else:
+                print(json_text)
+                
+        elif fmt == "md":
+            md_text = export_markdown(db)
+            if args.output:
+                with open(args.output, "w", encoding="utf-8") as f:
+                    f.write(md_text)
+                print(f"Exported Markdown overview to {args.output}")
+            else:
+                print(md_text)
+                
+        elif fmt == "zip":
+            out_path = args.output or os.path.join(repo_root, "synapse_export.zip")
+            export_zip(db, out_path, repo_root)
+            print(f"Exported ZIP snapshot to {out_path}")
+            
+        else:
+            print(f"Error: Unknown export format '{args.format}'", file=sys.stderr)
+            return 2
+            
     return 0
 
 
