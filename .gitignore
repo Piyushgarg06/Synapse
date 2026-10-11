@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Synapse data
+.synapse/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Test artifacts
+.pytest_cache/
+htmlcov/
+.coverage
