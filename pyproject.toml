@@ -3,14 +3,14 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "synapse"
-version = "0.1.0"
+name = "synapse-pkg"
+version = "3.0.0"
 description = "Synapse: Repository Intelligence Engine — local-first structural analysis and retrieval for code repositories"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
 authors = [
-    {name = "Synapse Contributors"}
+    {name = "Piyush Garg"}
 ]
 
 dependencies = [

@@ -10,12 +10,25 @@ Synapse is a local-first Repository Intelligence Engine that constructs and main
 - **Python**: `>= 3.10` (tested on Python 3.10, 3.11, 3.12, 3.13 on Windows and Linux)
 - **Git**: `git` executable available in `PATH`
 
-### Standard Installation
-Clone this repository and install into your active Python environment:
+### Install from PyPI
+
+Install the official package directly from PyPI:
 
 ```bash
-git clone https://github.com/your-org/synapse.git
-cd synapse
+pip install synapse-pkg==3.0.0
+```
+
+Or install the latest version:
+
+```bash
+pip install synapse-pkg
+```
+
+### Install from Source
+
+```bash
+git clone https://github.com/Piyushgarg06/Synapse.git
+cd Synapse
 pip install .
 ```
 
