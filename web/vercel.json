@@ -1,3 +1,7 @@
 {
-  "cleanUrls": true
+  "outputDirectory": "docs/.vitepress/dist",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/overview", "destination": "/" }
+  ]
 }

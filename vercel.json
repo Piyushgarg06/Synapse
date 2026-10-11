@@ -1,0 +1,7 @@
+{
+  "outputDirectory": "web/docs/.vitepress/dist",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/overview", "destination": "/" }
+  ]
+}
