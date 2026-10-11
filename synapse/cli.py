@@ -96,11 +96,12 @@ def cmd_search(args: argparse.Namespace) -> int:
         print("Error: Synapse not initialized. Run 'synapse init' first.", file=sys.stderr)
         return 1
     
+    from synapse.retrieval.engine import search_symbols_and_files
     query = args.query
     limit = args.limit
     
     with IndexDB(db_path) as db:
-        results = db.search_symbols(query, limit=limit)
+        results = search_symbols_and_files(db, query, limit=limit)
     
     if args.json_output:
         print(json.dumps(results, indent=2))
@@ -125,8 +126,57 @@ def cmd_inspect(args: argparse.Namespace) -> int:
         print("Error: Synapse not initialized. Run 'synapse init' first.", file=sys.stderr)
         return 1
     
-    # Stub for Phase 5
-    print("Inspect command will be implemented in Phase 5.", file=sys.stderr)
+    from synapse.retrieval.engine import inspect_symbol
+    with IndexDB(db_path) as db:
+        result = inspect_symbol(db, args.symbol, depth=getattr(args, "depth", 1))
+    
+    if args.json_output:
+        print(json.dumps(result, indent=2))
+        return 0
+    
+    if not result.get("found"):
+        print(result.get("message", "Symbol not found."))
+        return 0
+    
+    if result.get("ambiguous"):
+        print(result.get("message"))
+        for c in result.get("candidates", []):
+            print(f"  - {c['kind']:8s} {c['qualified_name']} ({c['file_path']}:{c['line']}) [id: {c['id']}]")
+        return 0
+    
+    sym = result["symbol"]
+    print(f"Symbol: {sym['qualified_name']} ({sym['kind']})")
+    print(f"  File:     {sym['file_path']}:{sym['start_line']}-{sym['end_line']}")
+    print(f"  ID:       {sym['id']}")
+    
+    if result.get("parent"):
+        print(f"  Defined in: {result['parent']['qualified_name']} ({result['parent']['kind']})")
+    
+    if result.get("base_classes"):
+        print("  Inherits from:")
+        for b in result["base_classes"]:
+            print(f"    - {b['qualified_name']} ({b['file_path']}:{b['start_line']})")
+            
+    if result.get("subclasses"):
+        print("  Subclasses:")
+        for s in result["subclasses"]:
+            print(f"    - {s['qualified_name']} ({s['file_path']}:{s['start_line']})")
+            
+    if result.get("callers"):
+        print("  Callers:")
+        for c in result["callers"]:
+            print(f"    - {c['qualified_name']} ({c['file_path']}:{c['start_line']})")
+            
+    if result.get("callees"):
+        print("  Calls:")
+        for c in result["callees"]:
+            print(f"    - {c['qualified_name']} ({c['file_path']}:{c['start_line']})")
+            
+    if result.get("unresolved_references"):
+        print("  Unresolved references:")
+        for u in result["unresolved_references"]:
+            print(f"    - [UNRESOLVED] {u['name']} (line {u['start_line']})")
+            
     return 0
 
 
@@ -139,8 +189,63 @@ def cmd_context(args: argparse.Namespace) -> int:
         print("Error: Synapse not initialized. Run 'synapse init' first.", file=sys.stderr)
         return 1
     
-    # Stub for Phase 5
-    print("Context command will be implemented in Phase 5.", file=sys.stderr)
+    from synapse.retrieval.engine import generate_context
+    with IndexDB(db_path) as db:
+        ctx = generate_context(
+            db,
+            repo_root,
+            args.query,
+            max_results=getattr(args, "max_results", 10),
+            max_bytes=getattr(args, "max_bytes", 8192),
+            depth=getattr(args, "depth", 2),
+        )
+    
+    output_content = ""
+    if args.json_output:
+        output_content = json.dumps(ctx, indent=2)
+    else:
+        out_lines = [
+            f"# Synapse Repository Context: {ctx['query']}",
+            f"",
+            f"{ctx['disclaimer']}",
+            f"",
+            f"Found {ctx['results_count']} item(s):",
+            f"",
+        ]
+        for it in ctx.get("items", []):
+            out_lines.append(f"## {it['kind'].capitalize()}: {it['qualified_name']}")
+            out_lines.append(f"Path: `{it['file_path']}` (Lines {it['start_line']}-{it['end_line']})")
+            out_lines.append(f"Reason: {it['reason']}")
+            if it.get("is_stale"):
+                out_lines.append("Warning: [!] File changed on disk since last indexing; snippet may not reflect working tree.")
+            out_lines.append("```")
+            out_lines.append(it['snippet'].rstrip())
+            out_lines.append("```")
+            if it.get("callees"):
+                out_lines.append("Calls:")
+                for c in it["callees"]:
+                    out_lines.append(f"  - {c['qualified_name']} ({c['file_path']}:{c['start_line']})")
+            out_lines.append("")
+            
+        if ctx.get("unresolved_dependencies"):
+            out_lines.append("## Unresolved References:")
+            for u in ctx["unresolved_dependencies"]:
+                out_lines.append(f"- `{u['reference']}` in `{u['symbol']}` ({u['file_path']}:{u['line']})")
+            out_lines.append("")
+            
+        output_content = "\n".join(out_lines)
+    
+    if args.output:
+        try:
+            with open(args.output, "w", encoding="utf-8") as f:
+                f.write(output_content)
+            print(f"Context written to {args.output}")
+        except Exception as e:
+            print(f"Error writing output file: {e}", file=sys.stderr)
+            return 1
+    else:
+        print(output_content)
+        
     return 0
 
 
