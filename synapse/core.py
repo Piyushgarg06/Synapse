@@ -14,6 +14,7 @@ from synapse.git.ops import (
 from synapse.analysis.dispatcher import analyze_file
 from synapse.parsing.parser import get_language_for_file
 from synapse.index.store import IndexDB
+from synapse.graph.builder import build_graph_and_resolve
 from synapse.exclusions import should_exclude_path
 
 
@@ -150,6 +151,9 @@ def _full_index(db: IndexDB, repo_root: str, head: str, is_rebuild: bool = False
             stats["symbols_found"] += len(analysis.symbols)
             stats["reparsed"] += 1
         
+        # Build graph and resolve references across the repository
+        build_graph_and_resolve(db, cursor=cursor)
+        
         # Set checkpoint in the same transaction
         db.set_checkpoint(head, cursor=cursor)
         db.conn.commit()
@@ -229,6 +233,9 @@ def _incremental_index(db: IndexDB, repo_root: str, checkpoint: str, head: str) 
                 stats["files_added"] += 1
             else:
                 stats["files_modified"] += 1
+        
+        # Re-build graph and re-resolve references across repository
+        build_graph_and_resolve(db, cursor=cursor)
         
         db.set_checkpoint(head, cursor=cursor)
         db.conn.commit()

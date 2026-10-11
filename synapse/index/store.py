@@ -39,7 +39,8 @@ CREATE TABLE IF NOT EXISTS symbols (
     start_column INTEGER NOT NULL,
     end_line INTEGER NOT NULL,
     end_column INTEGER NOT NULL,
-    ordinal INTEGER NOT NULL DEFAULT 0
+    ordinal INTEGER NOT NULL DEFAULT 0,
+    UNIQUE(file_path, qualified_name, kind, ordinal)
 );
 
 CREATE TABLE IF NOT EXISTS imports (
@@ -341,3 +342,117 @@ class IndexDB:
             "SELECT COUNT(*) as cnt FROM files WHERE parse_error = 1 OR has_errors = 1"
         ).fetchone()
         return row["cnt"]
+    
+    def get_nodes(self) -> list[dict]:
+        """Get all graph nodes (Repository, Files, Symbols)."""
+        nodes = [{"id": "repo:root", "type": "Repository", "name": "root"}]
+        
+        file_rows = self.conn.execute("SELECT path, language FROM files").fetchall()
+        for r in file_rows:
+            nodes.append({
+                "id": f"file:{r['path']}",
+                "type": "File",
+                "name": r["path"],
+                "language": r["language"],
+            })
+        
+        sym_rows = self.conn.execute(
+            "SELECT id, name, qualified_name, kind, file_path, start_line, end_line FROM symbols"
+        ).fetchall()
+        for r in sym_rows:
+            nodes.append({
+                "id": r["id"],
+                "type": r["kind"].capitalize(),
+                "name": r["name"],
+                "qualified_name": r["qualified_name"],
+                "file_path": r["file_path"],
+                "start_line": r["start_line"],
+                "end_line": r["end_line"],
+            })
+        
+        return nodes
+    
+    def get_edges(
+        self,
+        edge_type: Optional[str] = None,
+        source_id: Optional[str] = None,
+        target_id: Optional[str] = None,
+    ) -> list[dict]:
+        """Get edges matching criteria."""
+        query = "SELECT id, edge_type, source_id, target_id, file_path FROM edges WHERE 1=1"
+        params: list = []
+        if edge_type:
+            query += " AND edge_type = ?"
+            params.append(edge_type)
+        if source_id:
+            query += " AND source_id = ?"
+            params.append(source_id)
+        if target_id:
+            query += " AND target_id = ?"
+            params.append(target_id)
+        
+        query += " ORDER BY edge_type, source_id, target_id"
+        rows = self.conn.execute(query, params).fetchall()
+        return [dict(r) for r in rows]
+    
+    def get_references(
+        self,
+        status: Optional[str] = None,
+        file_path: Optional[str] = None,
+    ) -> list[dict]:
+        """Get references matching criteria."""
+        query = "SELECT id, file_path, name, status, resolved_symbol_id, context_qualified_name, start_line FROM references_ WHERE 1=1"
+        params: list = []
+        if status:
+            query += " AND status = ?"
+            params.append(status)
+        if file_path:
+            query += " AND file_path = ?"
+            params.append(file_path)
+        
+        query += " ORDER BY file_path, start_line"
+        rows = self.conn.execute(query, params).fetchall()
+        return [dict(r) for r in rows]
+    
+    def get_resolved_references(self, file_path: Optional[str] = None) -> list[dict]:
+        """Get resolved references."""
+        return self.get_references(status="resolved", file_path=file_path)
+    
+    def get_unresolved_references(self, file_path: Optional[str] = None) -> list[dict]:
+        """Get unresolved references."""
+        return self.get_references(status="unresolved", file_path=file_path)
+    
+    def get_symbol_by_id(self, symbol_id: str) -> Optional[dict]:
+        """Get a symbol by its ID."""
+        row = self.conn.execute(
+            """SELECT id, name, qualified_name, kind, file_path,
+                      start_byte, end_byte, start_line, start_column,
+                      end_line, end_column, ordinal
+               FROM symbols WHERE id = ?""",
+            (symbol_id,),
+        ).fetchone()
+        return dict(row) if row else None
+    
+    def get_callers(self, symbol_id: str) -> list[dict]:
+        """Get symbols that call symbol_id."""
+        rows = self.conn.execute(
+            """SELECT s.id, s.name, s.qualified_name, s.kind, s.file_path, s.start_line
+               FROM edges e
+               JOIN symbols s ON e.source_id = s.id
+               WHERE e.edge_type = 'CALLS' AND e.target_id = ?
+               ORDER BY s.file_path, s.qualified_name""",
+            (symbol_id,),
+        ).fetchall()
+        return [dict(r) for r in rows]
+    
+    def get_callees(self, symbol_id: str) -> list[dict]:
+        """Get symbols called by symbol_id."""
+        rows = self.conn.execute(
+            """SELECT s.id, s.name, s.qualified_name, s.kind, s.file_path, s.start_line
+               FROM edges e
+               JOIN symbols s ON e.target_id = s.id
+               WHERE e.edge_type = 'CALLS' AND e.source_id = ?
+               ORDER BY s.file_path, s.qualified_name""",
+            (symbol_id,),
+        ).fetchall()
+        return [dict(r) for r in rows]
