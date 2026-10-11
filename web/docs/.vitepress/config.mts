@@ -4,6 +4,7 @@ export default defineConfig({
   title: 'Synapse',
   description: 'Local-first Repository Intelligence Engine for codebases',
   cleanUrls: true,
+  ignoreDeadLinks: true,
   base: '/',
   head: [
     ['meta', { name: 'theme-color', content: '#d97706' }],
