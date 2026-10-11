@@ -129,15 +129,22 @@ class IndexDB:
         """Open the database connection and ensure schema exists."""
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
         self._conn = sqlite3.connect(self.db_path)
-        self._conn.row_factory = sqlite3.Row
-        self._conn.execute("PRAGMA foreign_keys=ON")
-        self._conn.execute("PRAGMA journal_mode=WAL")
-        self._init_schema()
+        try:
+            self._conn.row_factory = sqlite3.Row
+            self._conn.execute("PRAGMA foreign_keys=ON")
+            self._conn.execute("PRAGMA journal_mode=WAL")
+            self._init_schema()
+        except Exception:
+            self.close()
+            raise
     
     def close(self):
         """Close the database connection."""
         if self._conn:
-            self._conn.close()
+            try:
+                self._conn.close()
+            except Exception:
+                pass
             self._conn = None
     
     def __enter__(self):

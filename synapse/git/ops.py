@@ -18,12 +18,14 @@ def _run_git(args: list[str], cwd: str) -> str:
     
     Uses list args (never shell=True) with -C <root>.
     """
-    cmd = ["git", "-C", cwd] + args
+    cmd = ["git", "-c", "core.quotepath=false", "-C", cwd] + args
     try:
         result = subprocess.run(
             cmd,
             capture_output=True,
             text=True,
+            encoding="utf-8",
+            errors="replace",
             timeout=60,
         )
     except FileNotFoundError:
