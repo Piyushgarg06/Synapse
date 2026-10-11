@@ -11,6 +11,8 @@ from synapse.parsing.parser import (
     get_language_for_file, parse_source, has_parse_errors, MAX_FILE_SIZE,
 )
 from synapse.analysis.python_analyzer import analyze_python
+from synapse.analysis.js_analyzer import analyze_javascript
+from synapse.analysis.ts_analyzer import analyze_typescript
 
 
 def analyze_file(file_path: str, repo_root: str) -> Optional[FileAnalysis]:
@@ -25,7 +27,12 @@ def analyze_file(file_path: str, repo_root: str) -> Optional[FileAnalysis]:
     """
     language = get_language_for_file(file_path)
     if language is None:
-        return None  # Unsupported extension
+        return FileAnalysis(
+            file_path=file_path,
+            language="unsupported",
+            parse_error=True,
+            parse_error_message=f"Unsupported file extension: {os.path.splitext(file_path)[1]}",
+        )
     
     # Build absolute path
     abs_path = os.path.join(repo_root, file_path.replace("/", os.sep))
@@ -72,8 +79,11 @@ def analyze_file(file_path: str, repo_root: str) -> Optional[FileAnalysis]:
     # Route to language analyzer
     if language == "python":
         analysis = analyze_python(root_node, source, file_path)
+    elif language == "javascript":
+        analysis = analyze_javascript(root_node, source, file_path)
+    elif language in ("typescript", "tsx"):
+        analysis = analyze_typescript(root_node, source, file_path, language=language)
     else:
-        # Placeholder for JS/TS - will be implemented in Phase 2
         analysis = FileAnalysis(
             file_path=file_path,
             language=language,
