@@ -68,7 +68,7 @@ export default defineConfig({
           items: [
             { text: 'CLI Overview', link: '/reference/cli/overview' },
             { text: 'synapse init', link: '/reference/cli/init' },
-            { text: 'synapse index', link: '/reference/cli/index' },
+            { text: 'synapse index', link: '/reference/cli/' },
             { text: 'synapse status', link: '/reference/cli/status' },
             { text: 'synapse search', link: '/reference/cli/search' },
             { text: 'synapse inspect', link: '/reference/cli/inspect' },

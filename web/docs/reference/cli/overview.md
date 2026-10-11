@@ -22,7 +22,7 @@ synapse [-h] {init,index,status,search,inspect,context,export} ...
 | Command | Purpose | Reads | Writes |
 |---|---|---|---|
 | [`synapse init`](/reference/cli/init) | Initialize Synapse in a Git repository | `.git`, `.synapse/index.db` | `.synapse/`, `.synapse/index.db`, `.synapse/.gitignore` |
-| [`synapse index`](/reference/cli/index) | Index repository files incrementally or full rebuild | Git tree, source files, `.synapse/index.db` | `.synapse/index.db` |
+| [`synapse index`](/reference/cli/) | Index repository files incrementally or full rebuild | Git tree, source files, `.synapse/index.db` | `.synapse/index.db` |
 | [`synapse status`](/reference/cli/status) | Show index state, checkpoint, and dirty status | Git status, `.synapse/index.db` | None |
 | [`synapse search`](/reference/cli/search) | Search for symbols and files by name | `.synapse/index.db` | None |
 | [`synapse inspect`](/reference/cli/inspect) | Inspect a symbol, its hierarchy, and callers | `.synapse/index.db` | None |

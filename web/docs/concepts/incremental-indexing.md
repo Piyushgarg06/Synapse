@@ -70,4 +70,4 @@ If an error occurs while re-parsing an added or modified file:
 ## Related Reference
 
 - To inspect the current checkpoint, see [synapse status](/reference/cli/status).
-- To force a full index pass, see [synapse index --rebuild](/reference/cli/index).
+- To force a full index pass, see [synapse index --rebuild](/reference/cli/).
