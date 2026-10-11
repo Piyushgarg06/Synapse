@@ -46,6 +46,13 @@ def init_synapse(repo_root: str) -> tuple[bool, str]:
             return False, f"Synapse directory exists but database is corrupt: {e}"
     
     os.makedirs(synapse_dir, exist_ok=True)
+    gitignore_path = os.path.join(synapse_dir, ".gitignore")
+    if not os.path.exists(gitignore_path):
+        try:
+            with open(gitignore_path, "w") as f:
+                f.write("*\n")
+        except OSError:
+            pass
     
     try:
         with IndexDB(db_path) as db:
@@ -85,6 +92,7 @@ def run_index(repo_root: str, rebuild: bool = False) -> tuple[bool, dict]:
                 "files_processed": 0,
                 "symbols_found": db.get_symbol_count(),
                 "checkpoint": checkpoint,
+                "reparsed": 0,
             }
         
         # Check if checkpoint is an ancestor of HEAD

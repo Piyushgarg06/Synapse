@@ -151,10 +151,17 @@ def get_all_tracked_files(repo_root: str) -> list[str]:
 
 
 def is_working_tree_dirty(repo_root: str) -> bool:
-    """Check if the working tree has uncommitted changes."""
+    """Check if the working tree has uncommitted changes (excluding .synapse)."""
     try:
         output = _run_git(["status", "--porcelain"], repo_root).strip()
-        return bool(output)
+        if not output:
+            return False
+        for line in output.splitlines():
+            line = line.strip()
+            path = line[3:].strip() if len(line) > 3 else line
+            if not path.startswith(".synapse"):
+                return True
+        return False
     except GitError:
         return False
 

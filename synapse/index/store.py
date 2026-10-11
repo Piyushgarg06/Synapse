@@ -456,3 +456,35 @@ class IndexDB:
             (symbol_id,),
         ).fetchall()
         return [dict(r) for r in rows]
+
+    def get_normalized_dump(self) -> dict:
+        """Get a deterministic, normalized dump of the index contents.
+        
+        Useful for asserting index equivalence across full and incremental passes.
+        """
+        files = self.conn.execute(
+            "SELECT path, language, has_errors, parse_error FROM files ORDER BY path"
+        ).fetchall()
+        
+        symbols = self.conn.execute(
+            """SELECT id, name, qualified_name, kind, file_path,
+                      start_line, end_line, ordinal
+               FROM symbols ORDER BY file_path, qualified_name, ordinal"""
+        ).fetchall()
+        
+        edges = self.conn.execute(
+            """SELECT edge_type, source_id, target_id
+               FROM edges ORDER BY edge_type, source_id, target_id"""
+        ).fetchall()
+        
+        refs = self.conn.execute(
+            """SELECT file_path, name, status, resolved_symbol_id, context_qualified_name
+               FROM references_ ORDER BY file_path, name, context_qualified_name"""
+        ).fetchall()
+        
+        return {
+            "files": [dict(r) for r in files],
+            "symbols": [dict(r) for r in symbols],
+            "edges": [dict(r) for r in edges],
+            "references": [dict(r) for r in refs],
+        }
