@@ -38,7 +38,8 @@ def cmd_index(args: argparse.Namespace) -> int:
     """Handle 'synapse index'."""
     repo_root = _find_repo()
     rebuild = getattr(args, "rebuild", False)
-    success, stats = run_index(repo_root, rebuild=rebuild)
+    working_tree = getattr(args, "working_tree", False)
+    success, stats = run_index(repo_root, rebuild=rebuild, working_tree=working_tree)
     
     if success:
         if args.json_output:
@@ -79,9 +80,11 @@ def cmd_status(args: argparse.Namespace) -> int:
         print(f"  Edges:          {status['edges']}")
         if status.get("files_with_errors", 0) > 0:
             print(f"  Parse errors:   {status['files_with_errors']}")
-        if status.get("dirty_working_tree"):
-            print(f"  [!] Working tree has uncommitted changes not reflected in the index.")
-        if status.get("warning"):
+        if status.get("working_tree_indexed"):
+            print("  Working tree:   indexed (uncommitted changes reflected in index)")
+        elif status.get("dirty_working_tree"):
+            print("  [!] Working tree has uncommitted changes not reflected in the index.")
+        if status.get("warning") and not status.get("working_tree_indexed"):
             print(f"  [!] {status['warning']}")
     
     return 0
@@ -249,6 +252,142 @@ def cmd_context(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_delete_info(args: argparse.Namespace) -> int:
+    """Handle 'synapse delete-info <target> [symbol]'."""
+    repo_root = _find_repo()
+    db_path = get_db_path(repo_root)
+
+    if not os.path.exists(db_path):
+        print("Error: Synapse not initialized. Run 'synapse init' first.", file=sys.stderr)
+        return 1
+
+    from synapse.analysis.impact import analyze_file_deletion, analyze_symbol_deletion
+
+    target = args.target
+    symbol = getattr(args, "symbol", None)
+
+    with IndexDB(db_path) as db:
+        if symbol:
+            # Analyse deletion of a specific symbol scoped to file_path
+            result = analyze_symbol_deletion(db, symbol, file_path=target)
+        else:
+            # Try as file path first, then as symbol name
+            result = analyze_file_deletion(db, target)
+            if not result.get("found"):
+                result = analyze_symbol_deletion(db, target)
+
+    if args.json_output:
+        print(json.dumps(result, indent=2))
+        return 0
+
+    if not result.get("found"):
+        query = f"{target} {symbol}" if symbol else target
+        print(f"'{query}' not found in the index.")
+        return 0
+
+    if result.get("ambiguous"):
+        print("Ambiguous query. Multiple matches found:")
+        for c in result["candidates"]:
+            if "kind" in c:
+                print(f"  - {c['kind']:8s} {c['qualified_name']} ({c['file_path']}:{c['start_line']})")
+            else:
+                print(f"  - {c.get('path', c)}")
+        print("Specify the fully qualified name or more specific path.")
+        return 0
+
+    # --- File deletion report ---
+    if "symbols_lost" in result:
+        print(f"\n{'='*60}")
+        print(f"  DELETION IMPACT: {result['file_path']}")
+        print(f"{'='*60}")
+        print(f"  Language:       {result['language']}")
+        print(f"  Symbols lost:   {len(result['symbols_lost'])}")
+        print(f"  Affected files: {result['affected_file_count']}")
+        print(f"  Broken links:   {result['total_broken_links']}")
+
+        if result["symbols_lost"]:
+            print(f"\n  Symbols that would be removed:")
+            for s in result["symbols_lost"]:
+                print(f"    - {s['kind']:8s} {s['qualified_name']} (line {s['start_line']})")
+
+        deps = result["dependents"]
+
+        if deps["importers"]:
+            print(f"\n  Files that import from this module ({len(deps['importers'])}):")
+            for imp in deps["importers"]:
+                names = f" ({imp['imported_names']})" if imp.get("imported_names") else ""
+                print(f"    [-] {imp['file_path']}:{imp.get('start_line', 1)}{names}")
+
+        if deps["callers"]:
+            print(f"\n  External callers that would break ({len(deps['callers'])}):")
+            for c in deps["callers"]:
+                print(f"    [-] {c['qualified_name']} ({c['file_path']}:{c['start_line']}) calls {c['calls_symbol']}")
+
+        if deps["subclasses"]:
+            print(f"\n  Subclasses that would lose their base ({len(deps['subclasses'])}):")
+            for s in deps["subclasses"]:
+                print(f"    [-] {s['qualified_name']} ({s['file_path']}:{s['start_line']}) inherits {s['inherits_from']}")
+
+        if deps["references"]:
+            print(f"\n  Resolved references that would break ({len(deps['references'])}):")
+            for r in deps["references"]:
+                ctx = f" in {r['context_qualified_name']}" if r.get("context_qualified_name") else ""
+                print(f"    [-] {r['file_path']}:{r['start_line']} -> {r['name']}{ctx}")
+
+        if result["affected_file_count"] == 0:
+            print(f"\n  [+] Safe to delete - no other files depend on this.")
+        else:
+            print(f"\n  [!] {result['affected_file_count']} file(s) would be affected:")
+            for fp in result["affected_files"]:
+                print(f"    - {fp}")
+
+        print()
+        return 0
+
+    # --- Symbol deletion report ---
+    sym = result["symbol"]
+    print(f"\n{'='*60}")
+    print(f"  DELETION IMPACT: {sym['qualified_name']} ({sym['kind']})")
+    print(f"{'='*60}")
+    print(f"  File:           {sym['file_path']}:{sym['start_line']}-{sym['end_line']}")
+    print(f"  Affected files: {result['affected_file_count']}")
+    print(f"  Broken links:   {result['total_broken_links']}")
+
+    if result.get("children_lost"):
+        print(f"\n  Child symbols that would also be removed ({len(result['children_lost'])}):")
+        for ch in result["children_lost"]:
+            print(f"    - {ch['kind']:8s} {ch['qualified_name']} (line {ch['start_line']})")
+
+    deps = result["dependents"]
+
+    if deps["callers"]:
+        print(f"\n  Callers that would break ({len(deps['callers'])}):")
+        for c in deps["callers"]:
+            print(f"    [-] {c['qualified_name']} ({c['file_path']}:{c['start_line']})")
+
+    if deps["subclasses"]:
+        print(f"\n  Subclasses that would lose their base ({len(deps['subclasses'])}):")
+        for s in deps["subclasses"]:
+            print(f"    [-] {s['qualified_name']} ({s['file_path']}:{s['start_line']})")
+
+    if deps["references"]:
+        print(f"\n  Resolved references that would break ({len(deps['references'])}):")
+        for r in deps["references"]:
+            ctx = f" in {r['context_qualified_name']}" if r.get("context_qualified_name") else ""
+            print(f"    [-] {r['file_path']}:{r['start_line']} -> {r['name']}{ctx}")
+
+    if result["affected_file_count"] == 0:
+        print(f"\n  [+] Safe to delete - no other code depends on this symbol.")
+    else:
+        print(f"\n  [!] {result['affected_file_count']} file(s) would be affected:")
+        for fp in result["affected_files"]:
+            print(f"    - {fp}")
+
+    print()
+    return 0
+
+
+
 def cmd_export(args: argparse.Namespace) -> int:
     """Handle 'synapse export <format>'."""
     repo_root = _find_repo()
@@ -308,6 +447,7 @@ def build_parser() -> argparse.ArgumentParser:
     # index
     index_parser = subparsers.add_parser("index", help="Index the repository (initial or incremental)")
     index_parser.add_argument("--rebuild", action="store_true", help="Force a full rebuild of the index")
+    index_parser.add_argument("--working-tree", action="store_true", help="Index the uncommitted working tree (staged, modified, and untracked files)")
     index_parser.add_argument("--json", dest="json_output", action="store_true", help="Output as JSON")
     index_parser.set_defaults(func=cmd_index)
     
@@ -340,13 +480,38 @@ def build_parser() -> argparse.ArgumentParser:
     context_parser.add_argument("--json", dest="json_output", action="store_true", help="Output as JSON")
     context_parser.set_defaults(func=cmd_context)
     
+    # delete-info
+    delete_info_parser = subparsers.add_parser(
+        "delete-info",
+        help="Show blast-radius impact of deleting a file or symbol",
+    )
+    delete_info_parser.add_argument("target", help="File path or symbol name to analyse")
+    delete_info_parser.add_argument("symbol", nargs="?", default=None, help="Specific symbol within the file (optional)")
+    delete_info_parser.add_argument("--json", dest="json_output", action="store_true", help="Output as JSON")
+    delete_info_parser.set_defaults(func=cmd_delete_info)
+
     # export
     export_parser = subparsers.add_parser("export", help="Export index data")
     export_parser.add_argument("format", choices=["json", "md", "zip"], help="Export format")
     export_parser.add_argument("-o", "--output", type=str, help="Output file path")
     export_parser.set_defaults(func=cmd_export)
-    
+
+    # mcp
+    mcp_parser = subparsers.add_parser(
+        "mcp",
+        help="Start the Model Context Protocol (MCP) server for Claude Code, Gemini, and Codex",
+    )
+    mcp_parser.set_defaults(func=cmd_mcp)
+
     return parser
+
+
+def cmd_mcp(args: argparse.Namespace) -> int:
+    """Handle 'synapse mcp'."""
+    from synapse.mcp import main as run_mcp
+    run_mcp()
+    return 0
+
 
 
 def main(argv: Optional[list[str]] = None) -> int:

@@ -293,14 +293,14 @@ class IndexDB:
     def delete_file_data(self, file_path: str, *, cursor: Optional[sqlite3.Cursor] = None):
         """Delete all data associated with a file path."""
         c = cursor or self.conn.cursor()
-        c.execute("DELETE FROM files WHERE path = ?", (file_path,))
-        c.execute("DELETE FROM edges WHERE file_path = ?", (file_path,))
-        # Edges targeting symbols from this file need cleanup
+        # Edges targeting symbols or file itself need cleanup first
         c.execute(
             """DELETE FROM edges WHERE target_id IN 
-               (SELECT id FROM symbols WHERE file_path = ?)""",
-            (file_path,),
+               (SELECT id FROM symbols WHERE file_path = ?) OR target_id = ?""",
+            (file_path, f"file:{file_path}"),
         )
+        c.execute("DELETE FROM edges WHERE file_path = ? OR source_id = ?", (file_path, f"file:{file_path}"))
+        c.execute("DELETE FROM files WHERE path = ?", (file_path,))
         if cursor is None:
             self.conn.commit()
     

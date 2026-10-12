@@ -180,3 +180,74 @@ def get_tracked_files_at_commit(repo_root: str, commit: str) -> list[str]:
     
     files = [f for f in output.split("\0") if f]
     return files
+
+
+def get_working_tree_files(repo_root: str) -> list[str]:
+    """Get all non-ignored files in the working tree (both tracked and untracked) that exist on disk."""
+    try:
+        output = _run_git(["ls-files", "-c", "-o", "--exclude-standard", "-z"], repo_root)
+    except GitError:
+        return []
+
+    if not output:
+        return []
+
+    raw_files = [f for f in output.split("\0") if f]
+    existing = []
+    for f in raw_files:
+        posix = f.replace("\\", "/")
+        if posix.startswith(".synapse/") or posix == ".synapse":
+            continue
+        abs_path = os.path.join(repo_root, f.replace("/", os.sep))
+        if os.path.isfile(abs_path):
+            existing.append(posix)
+    return existing
+
+
+def get_working_tree_status(repo_root: str) -> list[tuple[str, str, Optional[str]]]:
+    """Get status of working tree changes (staged, modified, untracked, deleted).
+    
+    Returns list of (status, path, new_path).
+    Status: 'M' (modified), 'A' (added/untracked), 'D' (deleted), 'R' (renamed).
+    """
+    try:
+        output = _run_git(["status", "--porcelain", "-z"], repo_root)
+    except GitError:
+        return []
+
+    if not output:
+        return []
+
+    parts = output.split("\0")
+    results = []
+    i = 0
+    while i < len(parts):
+        entry = parts[i]
+        if not entry:
+            i += 1
+            continue
+
+        code = entry[:2]
+        path = entry[3:] if len(entry) > 3 else ""
+        posix = path.replace("\\", "/")
+
+        if posix.startswith(".synapse/") or posix == ".synapse":
+            i += 1
+            continue
+
+        if "R" in code:
+            old_path = posix
+            new_path = parts[i + 1].replace("\\", "/") if i + 1 < len(parts) else old_path
+            results.append(("R", old_path, new_path))
+            i += 2
+            continue
+        elif "D" in code:
+            results.append(("D", posix, None))
+        elif "??" in code or "A" in code:
+            results.append(("A", posix, None))
+        else:
+            results.append(("M", posix, None))
+        i += 1
+
+    return results
+
