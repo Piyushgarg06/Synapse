@@ -12,7 +12,7 @@ Initializes Synapse tracking and SQLite storage in a Git repository.
 ## Synopsis
 
 ```
-synapse init [-h]
+synapse init [-h] [--mcp]
 ```
 
 ---
@@ -20,6 +20,8 @@ synapse init [-h]
 ## Description
 
 `synapse init` prepares the repository for indexing by creating the `.synapse/` directory and applying the database schema in `.synapse/index.db`.
+
+Passing `--mcp` automatically detects installed AI tools (Claude Desktop, Cursor, Antigravity, Windsurf) and writes configuration settings so agents can query the repository immediately.
 
 - **Reads**: `.git/` metadata to verify the repository root; existing `.synapse/index.db` if present.
 - **Writes**: `.synapse/` directory, `.synapse/index.db`, `.synapse/.gitignore` (containing `*`).
@@ -31,6 +33,7 @@ synapse init [-h]
 
 | Option | Type | Default | Description |
 |---|---|---|---|
+| `--mcp` | Flag | `False` | Auto-configure MCP settings for detected AI IDEs and clients |
 | `-h`, `--help` | Flag | N/A | Show help message and exit |
 
 ---

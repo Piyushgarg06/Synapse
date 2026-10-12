@@ -1,7 +1,9 @@
 $ synapse index --help
-usage: synapse index [-h] [--rebuild] [--json]
+usage: synapse index [-h] [--rebuild] [--working-tree] [--json]
 
 options:
-  -h, --help  show this help message and exit
-  --rebuild   Force a full rebuild of the index
-  --json      Output as JSON
+  -h, --help      show this help message and exit
+  --rebuild       Force a full rebuild of the index
+  --working-tree  Index the uncommitted working tree (staged, modified, and
+                  untracked files)
+  --json          Output as JSON

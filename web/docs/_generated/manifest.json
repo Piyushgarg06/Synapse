@@ -179,21 +179,21 @@
     "exit_code": 0,
     "scenario": "27_help_main",
     "stderr": "",
-    "stdout": "usage: synapse [-h] {init,index,status,search,inspect,context,export} ...\n\nSynapse: Repository Intelligence Engine \ufffd local-first structural analysis and\nretrieval\n\npositional arguments:\n  {init,index,status,search,inspect,context,export}\n                        Available commands\n    init                Initialize Synapse in a Git repository\n    index               Index the repository (initial or incremental)\n    status              Show index status and statistics\n    search              Search for symbols and files\n    inspect             Inspect a symbol's definition and relationships\n    context             Retrieve focused repository context\n    export              Export index data\n\noptions:\n  -h, --help            show this help message and exit"
+    "stdout": "usage: synapse [-h]\n               {init,index,status,search,inspect,context,delete-info,export,mcp} ...\n\nSynapse: Repository Intelligence Engine \ufffd local-first structural analysis and\nretrieval\n\npositional arguments:\n  {init,index,status,search,inspect,context,delete-info,export,mcp}\n                        Available commands\n    init                Initialize Synapse in a Git repository\n    index               Index the repository (initial or incremental)\n    status              Show index status and statistics\n    search              Search for symbols and files\n    inspect             Inspect a symbol's definition and relationships\n    context             Retrieve focused repository context\n    delete-info         Show blast-radius impact of deleting a file or symbol\n    export              Export index data\n    mcp                 Start or auto-configure the Model Context Protocol\n                        (MCP) server\n\noptions:\n  -h, --help            show this help message and exit"
   },
   "28_help_init": {
     "command": "synapse init --help",
     "exit_code": 0,
     "scenario": "28_help_init",
     "stderr": "",
-    "stdout": "usage: synapse init [-h]\n\noptions:\n  -h, --help  show this help message and exit"
+    "stdout": "usage: synapse init [-h] [--mcp]\n\noptions:\n  -h, --help  show this help message and exit\n  --mcp       Auto-configure MCP for detected AI tools/IDEs"
   },
   "29_help_index": {
     "command": "synapse index --help",
     "exit_code": 0,
     "scenario": "29_help_index",
     "stderr": "",
-    "stdout": "usage: synapse index [-h] [--rebuild] [--json]\n\noptions:\n  -h, --help  show this help message and exit\n  --rebuild   Force a full rebuild of the index\n  --json      Output as JSON"
+    "stdout": "usage: synapse index [-h] [--rebuild] [--working-tree] [--json]\n\noptions:\n  -h, --help      show this help message and exit\n  --rebuild       Force a full rebuild of the index\n  --working-tree  Index the uncommitted working tree (staged, modified, and\n                  untracked files)\n  --json          Output as JSON"
   },
   "30_help_status": {
     "command": "synapse status --help",

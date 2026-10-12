@@ -5,14 +5,14 @@ description: Overview of the Synapse command-line interface commands and syntax
 
 # CLI Overview
 
-Synapse provides eight commands for initializing, indexing, inspecting, querying, and exporting repository structural intelligence.
+Synapse provides commands for initializing, indexing, inspecting, querying, impact analysis, exporting, and serving repository structural intelligence via MCP.
 
 ---
 
 ## Global Synopsis
 
 ```
-synapse [-h] {init,index,status,search,inspect,context,export} ...
+synapse [-h] {init,index,status,search,inspect,context,delete-info,export,mcp} ...
 ```
 
 ---
@@ -27,7 +27,9 @@ synapse [-h] {init,index,status,search,inspect,context,export} ...
 | [`synapse search`](/reference/cli/search) | Search for symbols and files by name | `.synapse/index.db` | None |
 | [`synapse inspect`](/reference/cli/inspect) | Inspect a symbol, its hierarchy, and callers | `.synapse/index.db` | None |
 | [`synapse context`](/reference/cli/context) | Retrieve focused, bounded source context | `.synapse/index.db`, source files on disk | Optional output file (`-o`) |
+| [`synapse delete-info`](/reference/cli/delete-info) | Analyze blast radius of deleting a file or symbol | `.synapse/index.db` | None |
 | [`synapse export`](/reference/cli/export) | Export index data to JSON, Markdown, or ZIP | `.synapse/index.db` | Optional output file (`-o`) |
+| [`synapse mcp`](/reference/cli/mcp) | Run or auto-configure Model Context Protocol server | `.synapse/index.db`, client configs | Client config JSON files |
 
 ---
 

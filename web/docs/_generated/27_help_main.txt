@@ -1,11 +1,12 @@
 $ synapse --help
-usage: synapse [-h] {init,index,status,search,inspect,context,export} ...
+usage: synapse [-h]
+               {init,index,status,search,inspect,context,delete-info,export,mcp} ...
 
 Synapse: Repository Intelligence Engine � local-first structural analysis and
 retrieval
 
 positional arguments:
-  {init,index,status,search,inspect,context,export}
+  {init,index,status,search,inspect,context,delete-info,export,mcp}
                         Available commands
     init                Initialize Synapse in a Git repository
     index               Index the repository (initial or incremental)
@@ -13,7 +14,10 @@ positional arguments:
     search              Search for symbols and files
     inspect             Inspect a symbol's definition and relationships
     context             Retrieve focused repository context
+    delete-info         Show blast-radius impact of deleting a file or symbol
     export              Export index data
+    mcp                 Start or auto-configure the Model Context Protocol
+                        (MCP) server
 
 options:
   -h, --help            show this help message and exit

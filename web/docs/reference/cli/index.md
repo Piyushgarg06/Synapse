@@ -12,7 +12,7 @@ Indexes the repository, updating structural symbols, relationships, and the comm
 ## Synopsis
 
 ```
-synapse index [-h] [--rebuild] [--json]
+synapse index [-h] [--rebuild] [--working-tree] [--json]
 ```
 
 ---
@@ -21,7 +21,9 @@ synapse index [-h] [--rebuild] [--json]
 
 `synapse index` parses eligible source files with Tree-sitter and updates the SQLite database. On the first run, it processes all tracked files at `HEAD`. On subsequent runs, it uses `git diff --name-status -M -z` to update only changed, added, deleted, or renamed files.
 
-- **Reads**: Git tree and diffs; tracked source files on disk; `.synapse/index.db`.
+Passing `--working-tree` inspects uncommitted modifications, staged edits, and untracked files on disk without requiring a Git commit. This ensures all AI assistants and subagents share updated state in `.synapse/index.db`.
+
+- **Reads**: Git tree and diffs; tracked source files on disk; working tree status; `.synapse/index.db`.
 - **Writes**: Records in `.synapse/index.db`; updates `checkpoint` in the `state` table.
 - **Never touches**: User source files or Git commit history.
 
@@ -32,6 +34,7 @@ synapse index [-h] [--rebuild] [--json]
 | Option | Type | Default | Description |
 |---|---|---|---|
 | `--rebuild` | Flag | `False` | Force a full rebuild of the index, discarding previous checkpoints |
+| `--working-tree` | Flag | `False` | Index uncommitted modifications, staged changes, and untracked files |
 | `--json` | Flag | `False` | Output indexing statistics as JSON |
 | `-h`, `--help` | Flag | N/A | Show help message and exit |
 

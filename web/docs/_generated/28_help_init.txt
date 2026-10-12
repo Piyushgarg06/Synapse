@@ -1,5 +1,6 @@
 $ synapse init --help
-usage: synapse init [-h]
+usage: synapse init [-h] [--mcp]
 
 options:
   -h, --help  show this help message and exit
+  --mcp       Auto-configure MCP for detected AI tools/IDEs
