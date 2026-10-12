@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "synapse-pkg"
-version = "3.0.0"
+version = "3.0.1"
 description = "Synapse: Repository Intelligence Engine — local-first structural analysis and retrieval for code repositories"
 readme = "README.md"
 license = {text = "MIT"}
