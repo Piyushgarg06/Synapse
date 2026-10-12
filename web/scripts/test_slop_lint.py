@@ -7,6 +7,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR))
 
+# pyrefly: ignore [missing-import]
 from slop_lint import lint_markdown_file, lint_css_file, load_banned_terms
 
 
