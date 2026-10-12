@@ -39,6 +39,8 @@ import asyncio
 from synapse.mcp import create_mcp_server
 
 server = create_mcp_server()
+assert server.instructions and "Synapse" in server.instructions
+
 tools = asyncio.run(server.list_tools())
 names = {t.name for t in tools}
 expected = {
@@ -50,6 +52,13 @@ expected = {
     "synapse_status",
 }
 assert expected.issubset(names), f"Missing tools: {expected - names}"
+
+prompts = asyncio.run(server.list_prompts())
+assert any(p.name == "instructions" for p in prompts)
+
+resources = asyncio.run(server.list_resources())
+assert any(str(r.uri) == "synapse://instructions" for r in resources)
+
 print("OK")
 """
         proc = subprocess.run([sys.executable, "-c", script], capture_output=True, text=True, check=True)

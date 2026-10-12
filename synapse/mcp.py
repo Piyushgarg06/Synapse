@@ -38,6 +38,18 @@ def _resolve_repo(repo_path: str = "") -> tuple[str, str]:
     return root, db_path
 
 
+def _load_instructions() -> str:
+    """Load instructions markdown bundled with Synapse."""
+    path = os.path.join(os.path.dirname(__file__), "mcp_instructions.md")
+    if os.path.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return f.read()
+        except OSError:
+            pass
+    return "Synapse repository intelligence and code knowledge graph MCP server."
+
+
 def create_mcp_server():
     """Create and configure the Synapse MCP Server."""
     try:
@@ -50,7 +62,21 @@ def create_mcp_server():
                 "MCP library is required to run the server. Install it via 'pip install mcp'."
             )
 
-    server = MCPServer("synapse")
+    instructions = _load_instructions()
+    try:
+        server = MCPServer("synapse", instructions=instructions)
+    except TypeError:
+        server = MCPServer("synapse")
+
+    @server.prompt(name="instructions")
+    def synapse_instructions() -> str:
+        """Return instructions and recommended workflow for Synapse MCP tools."""
+        return _load_instructions()
+
+    @server.resource("synapse://instructions")
+    def get_instructions_resource() -> str:
+        """Instructions and guide for using Synapse MCP tools."""
+        return _load_instructions()
 
     @server.tool(
         description=(
