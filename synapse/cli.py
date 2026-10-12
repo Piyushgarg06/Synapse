@@ -28,6 +28,10 @@ def cmd_init(args: argparse.Namespace) -> int:
     success, message = init_synapse(repo_root)
     if success:
         print(message)
+        if getattr(args, "mcp", False):
+            print("\nAuto-configuring MCP...")
+            from synapse.mcp_installer import install_mcp
+            install_mcp()
         return 0
     else:
         print(f"Error: {message}", file=sys.stderr)
@@ -442,6 +446,7 @@ def build_parser() -> argparse.ArgumentParser:
     
     # init
     init_parser = subparsers.add_parser("init", help="Initialize Synapse in a Git repository")
+    init_parser.add_argument("--mcp", action="store_true", help="Auto-configure MCP for detected AI tools/IDEs")
     init_parser.set_defaults(func=cmd_init)
     
     # index
@@ -499,18 +504,74 @@ def build_parser() -> argparse.ArgumentParser:
     # mcp
     mcp_parser = subparsers.add_parser(
         "mcp",
-        help="Start the Model Context Protocol (MCP) server for Claude Code, Gemini, and Codex",
+        help="Start or auto-configure the Model Context Protocol (MCP) server",
     )
+    mcp_sub = mcp_parser.add_subparsers(dest="mcp_subcommand")
+
+    # mcp install
+    install_parser = mcp_sub.add_parser(
+        "install",
+        help="Auto-configure Synapse MCP for installed IDEs and agents (Claude, Cursor, Antigravity, Windsurf, Cline)",
+    )
+    install_parser.add_argument(
+        "--target",
+        default="all",
+        help="Target client: all, antigravity, cursor, claude-desktop, claude-code, windsurf, cline, roo",
+    )
+    install_parser.add_argument(
+        "--project",
+        action="store_true",
+        help="Configure for current workspace/repo instead of global user config",
+    )
+
+    # mcp uninstall
+    uninstall_parser = mcp_sub.add_parser(
+        "uninstall",
+        help="Remove Synapse MCP configuration from IDEs and agents",
+    )
+    uninstall_parser.add_argument(
+        "--target",
+        default="all",
+        help="Target client: all, antigravity, cursor, claude-desktop, claude-code, windsurf, cline, roo",
+    )
+    uninstall_parser.add_argument(
+        "--project",
+        action="store_true",
+        help="Remove from current workspace/repo instead of global user config",
+    )
+
+    # mcp status
+    status_parser = mcp_sub.add_parser(
+        "status",
+        help="Check Synapse MCP configuration status across IDEs and agents",
+    )
+    status_parser.add_argument(
+        "--project",
+        action="store_true",
+        help="Check current workspace/repo instead of global user config",
+    )
+
     mcp_parser.set_defaults(func=cmd_mcp)
 
     return parser
 
 
 def cmd_mcp(args: argparse.Namespace) -> int:
-    """Handle 'synapse mcp'."""
-    from synapse.mcp import main as run_mcp
-    run_mcp()
-    return 0
+    """Handle 'synapse mcp' and subcommands."""
+    sub = getattr(args, "mcp_subcommand", None)
+    if sub == "install":
+        from synapse.mcp_installer import install_mcp
+        return install_mcp(target=getattr(args, "target", "all"), project=getattr(args, "project", False))
+    elif sub == "uninstall":
+        from synapse.mcp_installer import uninstall_mcp
+        return uninstall_mcp(target=getattr(args, "target", "all"), project=getattr(args, "project", False))
+    elif sub == "status":
+        from synapse.mcp_installer import status_mcp
+        return status_mcp(project=getattr(args, "project", False))
+    else:
+        from synapse.mcp import main as run_mcp
+        run_mcp()
+        return 0
 
 
 

@@ -80,8 +80,8 @@ def create_mcp_server():
 
     @server.tool(
         description=(
-            "Search symbols (functions, classes, methods) and file paths in the Synapse repository index. "
-            "Returns matched symbols with their files, line numbers, and qualified names."
+            "Search symbols (functions, classes, methods) and file paths in .synapse/index.db. "
+            "Use this instead of manually crawling directories to discover where code is defined."
         )
     )
     def synapse_search(query: str, repo_path: str = "", limit: int = 20) -> str:
@@ -93,8 +93,9 @@ def create_mcp_server():
 
     @server.tool(
         description=(
-            "Inspect a specific code symbol in detail. Returns definition location, docstring, "
-            "incoming callers, outgoing callees, inheritance hierarchy, and references."
+            "Inspect a specific code symbol from .synapse/index.db. Returns definition location, "
+            "docstring, incoming callers, outgoing callees, inheritance hierarchy, and references. "
+            "Always inspect a symbol here before modifying it."
         )
     )
     def synapse_inspect(symbol: str, repo_path: str = "", depth: int = 1) -> str:
@@ -106,9 +107,9 @@ def create_mcp_server():
 
     @server.tool(
         description=(
-            "Generate bounded, high-signal context snippet bundle for an AI model to work on a symbol. "
-            "Includes the target symbol definition, immediate callers, dependencies, and type context "
-            "strictly bounded within a token/character budget."
+            "Generate bounded, high-signal context snippet bundles directly from the .synapse/index.db "
+            "knowledge graph. Includes target definition, callers, dependencies, and type context "
+            "strictly bounded within a token budget. Use this instead of dumping entire files."
         )
     )
     def synapse_context(symbol: str, repo_path: str = "", depth: int = 2, budget: int = 8000) -> str:
@@ -120,9 +121,8 @@ def create_mcp_server():
 
     @server.tool(
         description=(
-            "Analyze deletion or modification blast radius. "
-            "Before deleting or refactoring a file or function, shows every file that would break, "
-            "external callers, subclasses, importers, and resolved references."
+            "Query .synapse/index.db for blast-radius impact analysis before modifying or deleting code. "
+            "Shows every external file that would break, callers, subclasses, importers, and references."
         )
     )
     def synapse_delete_info(target: str, symbol: str = "", repo_path: str = "") -> str:
@@ -139,8 +139,8 @@ def create_mcp_server():
 
     @server.tool(
         description=(
-            "Index the repository. If working_tree is true (default), uncommitted changes "
-            "and untracked files are immediately indexed so all AI models share accurate state."
+            "Index the repository into .synapse/index.db. If working_tree is true (default), uncommitted "
+            "changes and untracked files are immediately indexed so all AI models share updated context."
         )
     )
     def synapse_index(repo_path: str = "", working_tree: bool = True, rebuild: bool = False) -> str:
@@ -151,8 +151,8 @@ def create_mcp_server():
 
     @server.tool(
         description=(
-            "Get the current index status, indexed file and symbol counts, graph edge counts, "
-            "HEAD commit, checkpoint, and working tree dirty/indexed flags."
+            "Get the current index status of .synapse/index.db: indexed file and symbol counts, "
+            "graph edge counts, HEAD commit, checkpoint, and working tree dirty/indexed flags."
         )
     )
     def synapse_status(repo_path: str = "") -> str:

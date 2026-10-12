@@ -28,6 +28,9 @@ synapse-mcp = "synapse.mcp:main"
 [tool.setuptools.packages.find]
 include = ["synapse*"]
 
+[tool.setuptools.package-data]
+synapse = ["*.md"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v --tb=short"
